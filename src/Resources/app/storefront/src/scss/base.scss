@@ -1,0 +1,49 @@
+// Therius checkout lightbox. Real stylesheet on purpose — a strict merchant
+// style-src CSP with no 'unsafe-inline' blocks inline style="" attributes and
+// <style> tags alike; only an actual asset stylesheet like this one survives.
+.therius-lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+}
+
+.therius-lightbox-modal {
+    position: relative;
+    background: #fff;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2.5rem 1.5rem 1.5rem;
+}
+
+.therius-lightbox-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.75rem;
+    background: transparent;
+    border: 0;
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #6c757d;
+}
+
+.therius-lightbox-close:hover {
+    color: #212529;
+}
+
+.therius-lightbox-mount {
+    min-height: 200px;
+    width: 100%;
+}
+
+.therius-lightbox-error {
+    margin-top: 1rem;
+    color: #dc3545;
+}

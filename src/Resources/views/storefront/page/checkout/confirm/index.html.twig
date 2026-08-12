@@ -1,0 +1,36 @@
+{% sw_extends '@Storefront/storefront/page/checkout/confirm/index.html.twig' %}
+
+{% block page_checkout_confirm_payment %}
+    {{ parent() }}
+    
+    {% if page.paymentMethods|length > 0 %}
+        {% set theriusMethod = null %}
+        {% for method in page.paymentMethods %}
+            {% if method.handlerIdentifier == 'TheriusPayment\\Service\\TheriusPaymentHandler' %}
+                {% set theriusMethod = method %}
+            {% endif %}
+        {% endfor %}
+
+        {% if theriusMethod %}
+            {# Only static, non-time-bound config here — no clientToken. The token is
+               fetched fresh via AJAX (POST /therius/session-token) the moment the
+               shopper actually opens the Therius lightbox, not baked into this page
+               render. This block is intentionally NOT gated on Therius already being
+               the active context.paymentMethod: it must be present regardless of which
+               method happens to be selected when this page was rendered, so selecting
+               Therius never depends on a full confirm-page reload to work. #}
+            {% set isTestMode = config('TheriusPayment.config.testMode') %}
+            {% set apiBaseUrl = isTestMode ? 'https://api-sandbox.therius.io' : 'https://api.therius.io' %}
+
+            <div data-therius-payment="true" data-therius-config="{{ {
+                sdkUrl: apiBaseUrl ~ '/v1/sdk/js',
+                baseUrl: apiBaseUrl,
+                checkoutConfigId: isTestMode ? config('TheriusPayment.config.testCheckoutConfigId') : config('TheriusPayment.config.liveCheckoutConfigId'),
+                paymentMethodId: theriusMethod.id,
+                sessionTokenUrl: path('frontend.therius.session_token'),
+                preOrderUrl: path('frontend.therius.pre_order'),
+                preOrderInquiryUrl: path('frontend.therius.pre_order_inquiry')
+            }|json_encode }}"></div>
+        {% endif %}
+    {% endif %}
+{% endblock %}

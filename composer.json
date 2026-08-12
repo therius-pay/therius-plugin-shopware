@@ -1,0 +1,26 @@
+{
+  "name": "therius/payment",
+  "description": "Therius Payment plugin for Shopware 6",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Therius"
+    }
+  ],
+  "require": {
+    "shopware/core": "^6.4"
+  },
+  "extra": {
+    "shopware-plugin-class": "TheriusPayment\\TheriusPayment",
+    "label": {
+      "de-DE": "Therius Payments",
+      "en-GB": "Therius Payments"
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "TheriusPayment\\": "src/"
+    }
+  }
+}

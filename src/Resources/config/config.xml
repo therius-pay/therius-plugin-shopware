@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/shopware/platform/trunk/src/Core/System/SystemConfig/Schema/config.xsd">
+    <card>
+        <title>Therius Payment Credentials</title>
+        <title lang="de-DE">Therius Payment API-Schlüssel</title>
+
+        <input-field type="bool">
+            <name>testMode</name>
+            <label>Enable Test Mode</label>
+            <defaultValue>true</defaultValue>
+        </input-field>
+
+        <!-- Test credentials -->
+        <input-field type="text">
+            <name>testPublishableKey</name>
+            <label>Test Publishable Key</label>
+        </input-field>
+
+        <input-field type="password">
+            <name>testPrivateKey</name>
+            <label>Test Private Key</label>
+        </input-field>
+
+        <input-field type="text">
+            <name>testCheckoutConfigId</name>
+            <label>Test Checkout Config ID</label>
+        </input-field>
+
+        <input-field type="password">
+            <name>testWebhookSecret</name>
+            <label>Test Webhook Secret</label>
+        </input-field>
+
+        <!-- Live credentials -->
+        <input-field type="text">
+            <name>livePublishableKey</name>
+            <label>Live Publishable Key</label>
+        </input-field>
+
+        <input-field type="password">
+            <name>livePrivateKey</name>
+            <label>Live Private Key</label>
+        </input-field>
+
+        <input-field type="text">
+            <name>liveCheckoutConfigId</name>
+            <label>Live Checkout Config ID</label>
+        </input-field>
+
+        <input-field type="password">
+            <name>liveWebhookSecret</name>
+            <label>Live Webhook Secret</label>
+        </input-field>
+    </card>
+</config>
