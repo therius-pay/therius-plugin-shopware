@@ -27,6 +27,12 @@
             <label>Test Checkout Config ID</label>
         </input-field>
 
+        <input-field type="text">
+            <name>testMerchantCode</name>
+            <label>Test Merchant Code</label>
+            <helpText>Required. Find this on your Therius dashboard's Developers page, alongside your API keys.</helpText>
+        </input-field>
+
         <input-field type="password">
             <name>testWebhookSecret</name>
             <label>Test Webhook Secret</label>
@@ -46,6 +52,12 @@
         <input-field type="text">
             <name>liveCheckoutConfigId</name>
             <label>Live Checkout Config ID</label>
+        </input-field>
+
+        <input-field type="text">
+            <name>liveMerchantCode</name>
+            <label>Live Merchant Code</label>
+            <helpText>Required. Find this on your Therius dashboard's Developers page, alongside your API keys.</helpText>
         </input-field>
 
         <input-field type="password">

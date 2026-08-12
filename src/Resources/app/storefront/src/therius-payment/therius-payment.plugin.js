@@ -192,6 +192,24 @@ export default class TheriusPaymentPlugin extends Plugin {
      * the shopper's original click inside the widget. Nothing extra to do here
      * for 3DS/APM interaction.
      */
+    /**
+     * A recoveryAction on the response means PreOrderController's declineResponse()
+     * classified this as an actual decline (see its PHP doc comment) — reject with
+     * the SDK's DeclineError so CheckoutWidget's built-in smart recovery (remount
+     * for a retryable decline, a "try another method" nudge, or a terminal failure
+     * state) activates. Anything else (network failure, "Payment already exists",
+     * a malformed payload) is a real bug/outage, not a decline — plain Error,
+     * unchanged generic handling.
+     */
+    rejectWithDeclineInfo(reject, res, fallbackMessage) {
+        const message = res.error || fallbackMessage;
+        if (res.recoveryAction && window.TheriusSDK && window.TheriusSDK.DeclineError) {
+            reject(new window.TheriusSDK.DeclineError(message, res.recoveryAction));
+        } else {
+            reject(new Error(message));
+        }
+    }
+
     handlePreOrder(payload) {
         return new Promise((resolve, reject) => {
             this.client.post(this.config.preOrderUrl, JSON.stringify(payload), (response) => {
@@ -203,7 +221,7 @@ export default class TheriusPaymentPlugin extends Plugin {
                         resolve(true);
                         this.finishAndSubmit();
                     } else {
-                        reject(new Error(res.error || 'Payment failed'));
+                        this.rejectWithDeclineInfo(reject, res, 'Payment failed');
                     }
                 } catch (e) {
                     reject(e);
@@ -221,7 +239,7 @@ export default class TheriusPaymentPlugin extends Plugin {
                         resolve(true);
                         this.finishAndSubmit();
                     } else {
-                        reject(new Error(res.error || 'Payment failed'));
+                        this.rejectWithDeclineInfo(reject, res, 'Payment failed');
                     }
                 } catch (e) {
                     reject(e);
