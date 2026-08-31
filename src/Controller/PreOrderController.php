@@ -279,13 +279,12 @@ class PreOrderController extends AbstractController
         // Build purchase payload
         // The frontend sends the card/apm/walletData wrapper structure which we merge.
         // /v1/payment/purchase authenticates the merchant from the JSON body's `key` +
-        // `merchantCode` fields for server-to-server calls (unlike /v1/sdk/session, which
-        // reads only the private key from the Authorization header) — see
-        // paymentRequest.Key/MerchantCode and getMerchant()'s `m.code = $3` filter in
-        // therius-public-api/auth.go. Without both, every call 401s with "Merchant does
-        // not exist or incorrect credentials", regardless of payment method.
+        // `merchantCode` field for server-to-server calls, alongside the private key in
+        // the Authorization header (same as /v1/sdk/session) — see getMerchant()'s
+        // `m.code = $3` filter in therius-public-api/auth.go. Without merchantCode, every
+        // call 401s with "Merchant does not exist or incorrect credentials", regardless
+        // of payment method.
         $purchasePayload = array_merge($payload, [
-            'key' => $secretKey,
             'merchantCode' => $merchantCode,
             'orderCode' => $orderCode,
             // Must be explicit and distinct from orderCode here — see the orderCode/
