@@ -210,7 +210,26 @@ export default class TheriusPaymentPlugin extends Plugin {
         }
     }
 
+    // The shopper's browser data as EMV 3DS wants it — Redsys, Nuvei and Adyen embedded 3DS refuse
+    // the payment without it. The Accept header is the standard document value (a page cannot read
+    // its own); timeZoneOffset is minutes, UTC minus local.
+    collectBrowserInfo() {
+        const scr = window.screen || {};
+        return {
+            userAgent: navigator.userAgent || '',
+            acceptHeader: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            language: navigator.language || '',
+            colorDepth: scr.colorDepth || 24,
+            screenWidth: scr.width || 0,
+            screenHeight: scr.height || 0,
+            timeZoneOffset: new Date().getTimezoneOffset(),
+            javaEnabled: false,
+            javascriptEnabled: true,
+        };
+    }
+
     handlePreOrder(payload) {
+        payload.browserInfo = this.collectBrowserInfo();
         return new Promise((resolve, reject) => {
             this.client.post(this.config.preOrderUrl, JSON.stringify(payload), (response) => {
                 try {

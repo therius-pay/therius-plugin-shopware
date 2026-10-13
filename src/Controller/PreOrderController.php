@@ -267,12 +267,30 @@ class PreOrderController extends AbstractController
         // applied in therius-plugin-woocommerce/includes/class-wc-gateway-therius.php after
         // every WooCommerce-originated ACH purchase failed with the same missing-user_agent
         // error — this plugin never had the block at all.
-        if (empty($payload['browserInfo'])) {
-            $payload['browserInfo'] = [
-                'userAgent' => $request->headers->get('User-Agent', ''),
-                'ipAddress' => $request->getClientIp(),
-            ];
+        // The storefront JS also posts the screen/language/time-zone data EMV 3DS needs (Redsys,
+        // Nuvei and Adyen embedded 3DS refuse the payment without it). Only the known keys are
+        // taken, with their types enforced, and the user agent and IP stay Shopware's own.
+        $clientInfo = is_array($payload['browserInfo'] ?? null) ? $payload['browserInfo'] : [];
+        $browserInfo = [
+            'userAgent' => $request->headers->get('User-Agent', ''),
+            'ipAddress' => $request->getClientIp(),
+        ];
+        foreach (['acceptHeader', 'language'] as $key) {
+            if (isset($clientInfo[$key]) && is_string($clientInfo[$key]) && $clientInfo[$key] !== '') {
+                $browserInfo[$key] = $clientInfo[$key];
+            }
         }
+        foreach (['colorDepth', 'screenWidth', 'screenHeight', 'timeZoneOffset'] as $key) {
+            if (isset($clientInfo[$key]) && is_numeric($clientInfo[$key])) {
+                $browserInfo[$key] = (int) $clientInfo[$key];
+            }
+        }
+        foreach (['javaEnabled', 'javascriptEnabled'] as $key) {
+            if (isset($clientInfo[$key])) {
+                $browserInfo[$key] = (bool) $clientInfo[$key];
+            }
+        }
+        $payload['browserInfo'] = $browserInfo;
 
         [$apiUrl, $secretKey, $merchantCode] = $this->resolveCredentials();
 
