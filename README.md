@@ -46,7 +46,7 @@ To ensure payments that require asynchronous validation (like 3D Secure or alter
    - `payment.refused`
    - `payment.refunded`
    - `payment.refund_failed`
-   - `payment.cancelled`
+   - `payment.canceled`
    - `payment.chargeback`
    - `payment.capture_failed`
    - `payment.cancel_failed`

@@ -102,7 +102,7 @@ class WebhookController extends AbstractController
                     $this->transactionStateHandler->paid($transactionId, $context);
                     break;
                 case 'payment.refused':
-                case 'payment.cancelled':
+                case 'payment.canceled':
                 case 'payment.chargeback':
                 case 'payment.capture_failed':
                     $this->transactionStateHandler->fail($transactionId, $context);
