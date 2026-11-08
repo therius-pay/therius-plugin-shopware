@@ -423,7 +423,7 @@ class PreOrderController extends AbstractController
 
             if ($httpCode === 200 && $response) {
                 $responseData = json_decode($response, true);
-                if (isset($responseData['status']) && !in_array($responseData['status'], ['pending_ddc', 'pending_3ds'])) {
+                if (isset($responseData['status']) && empty($responseData['actionRequired'])) {
                     // Final status reached
                     break;
                 }
