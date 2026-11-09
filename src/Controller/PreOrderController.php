@@ -24,6 +24,8 @@ class PreOrderController extends AbstractController
     private RequestStack $requestStack;
     private NumberRangeValueGeneratorInterface $numberRangeValueGenerator;
 
+    public const PRESENTER_CODE = 'shopware';
+
     private const ZERO_DECIMAL_CURRENCIES = [
         'JPY', 'KRW', 'VND', 'CLP', 'BIF', 'DJF', 'GNF', 'KMF',
         'MGA', 'PYG', 'RWF', 'UGX', 'XAF', 'XOF', 'XPF'
@@ -111,7 +113,8 @@ class PreOrderController extends AbstractController
         ]));
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
-            'Authorization: Bearer ' . $secretKey
+            'Authorization: Bearer ' . $secretKey,
+            'Therius-Presenter-Code: ' . self::PRESENTER_CODE,
         ]);
 
         $response = curl_exec($ch);
@@ -321,7 +324,8 @@ class PreOrderController extends AbstractController
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Content-Type: application/json',
             'Authorization: Bearer ' . $secretKey,
-            'Idempotency-Key: ' . $idempotencyKey
+            'Idempotency-Key: ' . $idempotencyKey,
+            'Therius-Presenter-Code: ' . self::PRESENTER_CODE,
         ]);
         
         $response = curl_exec($ch);
@@ -414,7 +418,8 @@ class PreOrderController extends AbstractController
             $ch = curl_init($apiUrl . '/v1/payment/inquiry/' . urlencode($paymentCode));
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_HTTPHEADER, [
-                'Authorization: Bearer ' . $secretKey
+                'Authorization: Bearer ' . $secretKey,
+                'Therius-Presenter-Code: ' . self::PRESENTER_CODE,
             ]);
             
             $response = curl_exec($ch);
